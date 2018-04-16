@@ -4,9 +4,9 @@ It's an "equivalent performance" JBC T245 soldering iron stand.
 
 Here are some pictures:
 
-![Front](https://pcbx.us/muny/ceya.jpg)
-![Profile](https://pcbx.us/muny/ceyb.jpg)
-![Rear](https://pcbx.us/muny/ceyc.jpg)
+![Front](https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/front.jpg?raw=true)
+![Profile](https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/profile.jpg?raw=true)
+![Rear](https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/rear.jpg?raw=true)
 
 The case was designed in OpenJSCAD and printed on a FormLabs Form 2.
 
