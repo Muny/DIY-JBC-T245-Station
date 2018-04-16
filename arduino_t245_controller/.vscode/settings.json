@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "*.ipp": "cpp",
+        "condition_variable": "cpp",
+        "future": "cpp",
+        "random": "cpp"
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "includePath": [
+                "/usr/include/c++/5",
+                "/usr/include/x86_64-linux-gnu/c++/5",
+                "/usr/include/c++/5/backward",
+                "/usr/lib/gcc/x86_64-linux-gnu/5/include",
+                "/usr/local/include",
+                "/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+                "/usr/include/x86_64-linux-gnu",
+                "/usr/include",
+                "/home/kevin/Software/arduino-1.8.5/hardware/arduino/avr/cores/arduino",
+                "/home/kevin/Software/arduino-1.8.5/hardware/teensy/avr/libraries/",
+                "/home/kevin/Software/arduino-1.8.5/hardware/tools/avr/avr/include",
+                "/home/kevin/Arduino/libraries/",
+                "${workspaceRoot}"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "/usr/include/c++/5",
+                    "/usr/include/x86_64-linux-gnu/c++/5",
+                    "/usr/include/c++/5/backward",
+                    "/usr/lib/gcc/x86_64-linux-gnu/5/include",
+                    "/usr/local/include",
+                    "/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed",
+                    "/usr/include/x86_64-linux-gnu",
+                    "/usr/include",
+                    "/home/kevin/Software/arduino-1.8.5/hardware/arduino/avr/cores/arduino",
+                    "/home/kevin/Software/arduino-1.8.5/hardware/teensy/avr/libraries/",
+                    "/home/kevin/Arduino/libraries/",
+                    "/home/kevin/Software/arduino-1.8.5/hardware/tools/avr/avr/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": false,
+                "databaseFilename": ""
+            },
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 3
+}

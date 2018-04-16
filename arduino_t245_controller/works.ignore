@@ -1,0 +1,300 @@
+#include <Arduino.h>
+#include <MAX31856.h>
+#include <PID_v1.h>
+
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define FONT_BIG futura_medium_condensed_bt22pt7b
+#define FONT_SMALL futura_medium_condensed_bt9pt7b
+#include "futuramdcn22pt7b.h"
+#include "futuramdcn9pt7b.h"
+
+Adafruit_SSD1306 display;
+
+// CHANGES MADE::::::::::::;!!!!!!!!!!!!!
+/*
+check ZERO CROSSING PIN FROM 2 TO 7
+check SLEEP PIN FROM 7 TO 11
+check DRDY PIN FROM 3 TO 10
+
+*/
+
+// 10,000,000
+
+#define GATE_PIN 12
+#define ZERO_CROSSING_PIN 7
+#define DRDY_PIN 10
+#define SLEEP_PIN 11
+
+volatile unsigned long lastInterrupt = 0;
+
+#define SCK SCK
+#define CS 4
+#define SDI MOSI
+#define SDO MISO
+
+// MAX31856 Initial settings (see MAX31856.h and the MAX31856 datasheet)
+// The default noise filter is 60Hz, suitable for the USA
+#define CR0_INIT (CR0_AUTOMATIC_CONVERSION + CR0_OPEN_CIRCUIT_FAULT_TYPE_K /* + CR0_NOISE_FILTER_50HZ */)
+#define CR1_INIT (CR1_AVERAGE_1_SAMPLE + CR1_VOLTAGE_MODE_GAIN_32)
+#define MASK_INIT (~(MASK_VOLTAGE_UNDER_OVER_FAULT + MASK_THERMOCOUPLE_OPEN_FAULT))
+
+MAX31856 *temperature;
+
+double currTemp = 0;
+
+unsigned long lastSample = 0;
+double wait = 7800;
+unsigned long lastSetTempSample = 0;
+
+double targetTemp = 0;
+
+double displayCurrTemp = 0;
+double displaySetTemp = 0;
+double displayWait = 0;
+
+bool SLEEP = false;
+bool displaySleep = true;
+
+bool OVERRIDE_DISABLE_HEATER = false;
+
+char displayCurrTempStr[5] = "000.0";
+char displaySetTempStr[5] = "000.0";
+char displayWaitStr[4] = "0000";
+char displaySleepStr[1] = "0";
+
+// made this change to volatile, might break?
+volatile unsigned long scheduledPulse = 0;
+
+double Kp = 35, Ki = 26, Kd = 35;
+
+//double Kp = 30, Ki = 16, Kd = 17.5;
+PID myPID(&currTemp, &wait, &targetTemp, Kp, Ki, Kd, REVERSE);
+
+unsigned long lastDisplayUpdate = 0;
+
+volatile bool doPulse = false;
+
+void setup()
+{
+    //Serial.begin(230400);
+
+    pinMode(13, OUTPUT);
+
+    digitalWrite(13, HIGH);
+
+    delay(100);
+
+    digitalWrite(13, LOW);
+
+    delay(100);
+
+    digitalWrite(13, HIGH);
+
+    delay(100);
+
+    digitalWrite(13, LOW);
+
+    myPID.SetOutputLimits(800, 7800);
+    myPID.SetSampleTime(100);
+
+    myPID.SetMode(AUTOMATIC);
+
+    pinMode(SLEEP_PIN, INPUT);
+
+    pinMode(ZERO_CROSSING_PIN, INPUT_PULLUP);
+    pinMode(GATE_PIN, OUTPUT);
+
+    temperature = new MAX31856(SDI, SDO, CS, SCK);
+
+    // Initializing the MAX31855's registers
+    temperature->writeRegister(REGISTER_CR0, CR0_INIT);
+    temperature->writeRegister(REGISTER_CR1, CR1_INIT);
+    temperature->writeRegister(REGISTER_MASK, MASK_INIT);
+
+    display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
+    display.clearDisplay();
+
+    display.setTextWrap(false);
+    display.setTextSize(1);
+    display.setTextColor(WHITE);
+    display.setCursor(0, 0);
+    //display.println("T245 Iron Controller");
+
+    updateDisplay();
+
+    attachInterrupts();
+}
+
+void loop()
+{
+    if (doPulse && !OVERRIDE_DISABLE_HEATER)
+    {
+        if (micros() >= scheduledPulse)
+        {
+            doPulse = false;
+
+            digitalWrite(GATE_PIN, HIGH);
+            digitalWrite(GATE_PIN, LOW);
+        }
+    }
+
+    unsigned long now = millis();
+
+    bool didSampleTemp = false;
+
+    // should we sample temperature?
+    if (now - lastSample > 400)
+    {
+        didSampleTemp = true;
+        noInterrupts();
+
+        readTemp();
+        delayMicroseconds(100);
+        while (digitalRead(DRDY_PIN))
+        {
+            ;
+        }
+
+        readTemp();
+        delayMicroseconds(100);
+        while (digitalRead(DRDY_PIN))
+        {
+            ;
+        }
+
+        ///// seems to be relatively stable without this...
+
+        readTemp();
+        delayMicroseconds(100);
+        while (digitalRead(DRDY_PIN))
+        {
+            ;
+        }
+
+        currTemp = readTemp();
+        if (currTemp > 999.9)
+        {
+            if (SLEEP)
+                currTemp = 0;
+            else
+            {
+                OVERRIDE_DISABLE_HEATER = true;
+                //SLEEP = true;
+                currTemp = 999.9;
+            }
+        }
+        else if (currTemp < 0)
+        {
+            currTemp = 0;
+        }
+        else
+        {
+            OVERRIDE_DISABLE_HEATER = false;
+        }
+
+        interrupts();
+
+        int val = analogRead(A0);
+
+        targetTemp = mapdouble(val, 0, 1023, 300, 700);
+
+        now = millis();
+
+        myPID.SetSampleTime(now - lastSample);
+
+        lastSample = now;
+    }
+
+    if (!SLEEP && currTemp != 0)
+        myPID.Compute();
+
+    //if (now - lastDisplayUpdate > 400)
+    if (didSampleTemp)
+    {
+        updateDisplay();
+    }
+}
+
+void updateDisplay()
+{
+    display.clearDisplay();
+
+    display.setFont(&FONT_BIG);
+
+    dtostrf(currTemp, 5, 1, displayCurrTempStr);
+
+    display.setCursor(25, 36);
+    display.print(displayCurrTempStr);
+
+    display.setFont(&FONT_SMALL);
+
+    display.setCursor(110, 24);
+    display.print("F");
+
+    dtostrf(targetTemp, 5, 1, displaySetTempStr);
+
+    display.setCursor(48, 60);
+    display.print(displaySetTempStr);
+
+    display.setFont();
+
+    dtostrf(wait, 4, 0, displayWaitStr);
+
+    display.setCursor(102, 52);
+    display.print(displayWaitStr);
+
+    dtostrf(SLEEP, 1, 0, displaySleepStr);
+
+    display.setCursor(1, 52);
+    display.print(displaySleepStr);
+
+    if (OVERRIDE_DISABLE_HEATER)
+        display.invertDisplay(true);
+    else
+        display.invertDisplay(false);
+
+    display.display();
+
+    lastDisplayUpdate = millis();
+}
+
+void zeroCrossingInterrupt()
+{
+    if (!SLEEP)
+    {
+        unsigned long now = millis();
+
+        if (now - lastInterrupt > 1)
+        {
+            lastInterrupt = now;
+
+            doPulse = true;
+
+            scheduledPulse = micros() + wait;
+        }
+    }
+}
+
+void attachInterrupts()
+{
+    attachInterrupt(digitalPinToInterrupt(ZERO_CROSSING_PIN), zeroCrossingInterrupt, RISING);
+}
+
+double C_TO_F(double c)
+{
+    return ((c * (9.0 / 5.0)) + 32.0);
+}
+
+double readTemp()
+{
+    double v = temperature->readThermocoupleVoltage();
+
+    return 122.5438816 + 5.66934596 * v;
+}
+
+double mapdouble(double x, double in_min, double in_max, double out_min, double out_max)
+{
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
