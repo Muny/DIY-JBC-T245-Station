@@ -2,6 +2,8 @@ This is a project I've been working on for a little bit. Any questions are very 
 
 It's an "equivalent performance" JBC T245 soldering iron stand.
 
+Here's a video of it in action: [YouTube Video](https://www.youtube.com/edit?o=U&video_id=Gup-r7FQM7E)
+
 Here are some pictures:
 
 ![Front](https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/front.jpg?raw=true)
