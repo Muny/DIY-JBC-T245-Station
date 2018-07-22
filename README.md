@@ -2,16 +2,19 @@ This is a project I've been working on for a little bit. Any questions are very 
 
 It's an "equivalent performance" JBC T245 soldering iron stand.
 
-Here's a video of it in action: [YouTube Video](https://www.youtube.com/watch?v=Gup-r7FQM7E)
+## Video in-action
+[YouTube Video](https://www.youtube.com/watch?v=Gup-r7FQM7E)
 
-Here are schematics and a PCB layout: https://easyeda.com/Muny/JBC-T245-Iron-Controller
+## Schematics & PCB Layout
+https://easyeda.com/Muny/JBC-T245-Iron-Controller
 
-Here are some pictures:
-
+## Pictures
 <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/front.jpg?raw=true" alt="Front" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/profile.jpg?raw=true" alt="Profile" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/rear.jpg?raw=true" alt="Rear" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/assembly-1.jpg?raw=true" alt="Assembly 1" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/assembly-2.jpg?raw=true" alt="Assembly 2" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/assembly-3.jpg?raw=true" alt="Assembly 3" width="64">
 
 <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/assembly-4.jpg?raw=true" alt="Assembly 4" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/assembly-5.jpg?raw=true" alt="Assembly 5" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/in-use.jpg?raw=true" alt="In Use" width="64"> <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/pcb-bare.jpg?raw=true" alt="PCB Bare" width="64">
 <img src="https://github.com/Muny-/DIY-JBC-T245-Station/blob/master/pics/pcb-assembled.jpg?raw=true" alt="PCB Assembled" width="64">
+
+## About the Design
 
 The case was designed in OpenJSCAD and printed on a FormLabs Form 2.
 
