@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name JBC_T245_Iron_Controller)(type Legacy)(uri /home/kevin/src/DIY-JBC-T245-Station/kicad_sch/JBC_T245_Iron_Controller/JBC_T245_Iron_Controller.lib)(options "")(descr ""))
+)

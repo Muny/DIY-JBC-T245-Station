@@ -1,4 +1,4 @@
-include('utils.js');
+require('utils');
 
 // 140 works
 var RES = 15;

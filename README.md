@@ -2,8 +2,9 @@ This is a project I've been working on for a little bit. Any questions are very 
 
 It's an "equivalent performance" JBC T245 soldering iron stand.
 
-## Video in-action
-[YouTube Video](https://www.youtube.com/watch?v=Gup-r7FQM7E)
+## Videos in-action
+[V2](https://www.youtube.com/watch?v=oT_kzjgQcro)
+[V1](https://www.youtube.com/watch?v=Gup-r7FQM7E)
 
 ## Schematics & PCB Layout
 https://easyeda.com/Muny/JBC-T245-Iron-Controller
