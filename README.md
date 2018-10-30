@@ -4,6 +4,7 @@ It's an "equivalent performance" JBC T245 soldering iron stand.
 
 ## Videos in-action
 [V2](https://www.youtube.com/watch?v=oT_kzjgQcro)
+
 [V1](https://www.youtube.com/watch?v=Gup-r7FQM7E)
 
 ## Schematics & PCB Layout
